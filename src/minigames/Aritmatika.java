@@ -5,8 +5,18 @@
  */
 package minigames;
 
+import java.util.LinkedList;
 import java.util.Random;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -19,10 +29,18 @@ public class Aritmatika extends javax.swing.JFrame {
      */
     public Aritmatika() {
         initComponents();
+        // set only number can fill ans
+        ((AbstractDocument)ans.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+        qtySkip.setText("Kesempatan skip : "+Integer.toString(this.skip));
         run();
+        tableUpdate();
     }
     
+    String qst = "";
     int result = 0;
+    boolean tf = true;
+    LinkedList<HasilTest> hasilTestList = new LinkedList<>();
+    int skip = 2;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,38 +51,42 @@ public class Aritmatika extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        qstText = new javax.swing.JLabel();
         ans = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        numb1 = new javax.swing.JLabel();
-        numb2 = new javax.swing.JLabel();
-        op = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        qtySkip = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableList = new javax.swing.JTable();
+        jButton3 = new javax.swing.JButton();
+        qtyBenar = new javax.swing.JLabel();
+        qtySalah = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        jLabel1.setText("Aritmatika");
+        qstText.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        qstText.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        qstText.setText("question");
 
         ans.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        ans.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        ans.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         ans.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ansActionPerformed(evt);
             }
         });
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel2.setText("=");
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Skip");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        ans.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ansKeyReleased(evt);
             }
         });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel2.setText("=");
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton2.setText("Check");
@@ -79,99 +101,206 @@ public class Aritmatika extends javax.swing.JFrame {
             }
         });
 
-        numb1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        numb1.setText("numb1");
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton1.setText("Skip");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        numb2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        numb2.setText("numb2");
+        qtySkip.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        qtySkip.setText("Kesempatan skip :");
 
-        op.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        op.setText("op");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(78, 78, 78)
+                .addComponent(qstText)
+                .addGap(44, 44, 44)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(ans, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(qtySkip, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addGap(133, 133, 133))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(qstText)
+                    .addComponent(ans, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(jButton2))
+                    .addComponent(qtySkip, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        tableList.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No", "Qst", "Ans", "True/False"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableList);
+
+        jButton3.setText("Reset");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jButton3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton3KeyPressed(evt);
+            }
+        });
+
+        qtyBenar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        qtyBenar.setText("Benar:");
+
+        qtySalah.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        qtySalah.setText("Salah:");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/minigames/education_calculator_maths_math_icon_149699 (1).png"))); // NOI18N
+        jLabel3.setText("Aritmatika");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(numb1)
-                        .addGap(18, 18, 18)
+                        .addGap(131, 131, 131)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
+                            .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(op)
-                                .addGap(18, 18, 18)
-                                .addComponent(numb2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jButton2))
-                                    .addComponent(ans, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(0, 67, Short.MAX_VALUE))
+                                        .addGap(165, 165, 165)
+                                        .addComponent(jButton3))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(143, 143, 143)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(qtySalah, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(qtyBenar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
+                .addGap(135, 135, 135))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel1)
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ans, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(numb1)
-                    .addComponent(numb2)
-                    .addComponent(op))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(54, 54, 54))
+                .addGap(33, 33, 33)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addComponent(qtyBenar)
+                        .addGap(44, 44, 44)
+                        .addComponent(qtySalah)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3)))
+                .addGap(34, 34, 34))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(765, 562));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void run(){
-        
+                
         int rand1 = getRandomNumber();
         int rand2 = getRandomNumber();
+        
         String ops = getRandomOperation();
         
-        result = 0;
+        this.result = 0;
         switch (ops) {
             case "+":
-                result = rand1 + rand2;
+                this.result = rand1 + rand2;
                 break;
+                
             case "-":
-                result = rand1 - rand2;
+                this.result = rand1 - rand2;
                 break;
+                
             case "*":
-                result = rand1 * rand2;
+                this.result = rand1 * rand2;
                 break;
+                
             case "/":
-                result = rand1 / rand2;
+                
+                
+                if(((rand1%rand2)!=0) || ((rand1/rand2)<1)){
+                    do{
+                        rand1 = getRandomNumber();
+                        rand2 = getRandomNumber();
+                    }while(((rand1%rand2)!=0) || ((rand1/rand2)<1));   
+                }
+                
+                this.result = rand1 / rand2;
+                
                 break;
             default:
         }
         
-        // set numb1
-        numb1.setText(Integer.toString(rand1));
-        op.setText(ops);
-        numb2.setText(Integer.toString(rand2));
+        // set qst
+        qst = Integer.toString(rand1)+" "+ops+" "+Integer.toString(rand2);
+        qstText.setText(qst);
         
     }
     
     // random number 0 - 100 digits
     private int getRandomNumber(){
         Random random = new Random();
-        int randomNumber = random.nextInt(101);
+        int randomNumber = random.nextInt(100) + 1;
         return randomNumber;
     }
     
@@ -183,12 +312,144 @@ public class Aritmatika extends javax.swing.JFrame {
         return operations[index];
     }
     
-    private void ansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ansActionPerformed
+    private void checkAns(){
         
-    }//GEN-LAST:event_ansActionPerformed
+        if(ans.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "MOHON ISI DAHULU!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        String anss = ans.getText();
+        int answare = Integer.parseInt(ans.getText());        
+        
+        if(this.result == answare){
+            JOptionPane.showMessageDialog(null, "SELAMAT JAWABAN BENAR!", "Alert", JOptionPane.INFORMATION_MESSAGE);     
+            ans.setText("");
+            HasilTest ht = new HasilTest(qst, anss, this.result, true);
+            hasilTestList.add(ht);
+            run();
+        }else{
+            ans.setText("");
+            JOptionPane.showMessageDialog(null, "JAWABAN SALAH COBA LAGI!", "Alert", JOptionPane.INFORMATION_MESSAGE);  
+            HasilTest ht = new HasilTest(qst, anss, this.result, false);
+            hasilTestList.add(ht);
+        }
+        tableUpdate();
+    }
+    
+    // regex just number
+    class NumericDocumentFilter extends DocumentFilter {
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+            if (isValidInteger(string, fb.getDocument().getText(0, fb.getDocument().getLength()), offset)) {
+                super.insertString(fb, offset, string, attr);
+            }
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            if (isValidInteger(text, fb.getDocument().getText(0, fb.getDocument().getLength()), offset)) {
+                super.replace(fb, offset, length, text, attrs);
+            }
+        }
+
+        @Override
+        public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
+            super.remove(fb, offset, length);
+        }
+
+        private boolean isValidInteger(String text, String currentText, int offset) {
+            try {
+                StringBuilder newText = new StringBuilder(currentText);
+                newText.insert(offset, text);
+                if (newText.toString().equals("-")) {
+                    return true;
+                }
+                Integer.parseInt(newText.toString());
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+    }
+    
+    private void tableUpdate(){
+        
+        DefaultTableModel d = (DefaultTableModel)tableList.getModel(); // get table`
+        
+        d.setRowCount(0); 
+        
+        // set data in table
+        int i = 1;
+        int countBenar = 0;
+        int countSalah = 0;
+        for (HasilTest ht : hasilTestList) {
+            
+            //  ht.tampilkanData(); //-- untuk test cek
+            
+            Vector v2 = new Vector();
+            
+            v2.add(i++);
+            v2.add(ht.qst);
+            v2.add(ht.ans);
+            //v2.add(ht.result);
+            v2.add(ht.tf);
+            
+            if(ht.tf){
+                countBenar++;
+            }else{
+                countSalah++;
+                
+            }
+            
+            d.addRow(v2);
+            
+        }    
+        
+        // set qty benar
+            qtyBenar.setText("Benar : "+Integer.toString(countBenar));
+        
+        // set qty salah
+            qtySalah.setText("Salah : "+Integer.toString(countSalah));
+        
+        
+    }
+    
+    
+    public class HasilTest{
+        String qst;
+        String ans;
+        int result;
+        boolean tf;
+        
+        public HasilTest(String qst, String ans, int result, boolean tf){
+            this.qst = qst;
+            this.ans = ans;
+            this.result = result;
+            this.tf = tf;
+        }
+        
+        public void tampilkanData(){
+//            JOptionPane.showMessageDialog(null, "Qst: " + this.qst + ", Ans: " + this.ans + ", Result: " + this.result,
+//            "Info", JOptionPane.INFORMATION_MESSAGE);
+            
+            System.out.println("Qst: " + this.qst + ", Ans: " + this.ans + ", Result: " + this.result + ", true/false= " + this.tf);
+        }
+        
+    }
+    
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        run();
+        if(this.skip>0){
+            run();
+            this.skip--;
+            qtySkip.setText("Kesempatan skip : "+Integer.toString(this.skip));
+        }else{
+            JOptionPane.showMessageDialog(null, "Kesempatan Skip Habis!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -196,18 +457,29 @@ public class Aritmatika extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        
-        int answare = Integer.parseInt(ans.getText());
-        
-        if(result == answare){
-            JOptionPane.showMessageDialog(null, "SELAMAT JAWABAN BENAR!", "Alert", JOptionPane.INFORMATION_MESSAGE);     
-            run();
-            ans.setText("");
-        }else{
-            JOptionPane.showMessageDialog(null, "JAWABAN SALAH COBA LAGI!", "Alert", JOptionPane.INFORMATION_MESSAGE);  
-        }
-        
+        checkAns();
     }//GEN-LAST:event_jButton2MouseClicked
+
+    private void ansKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ansKeyReleased
+
+    }//GEN-LAST:event_ansKeyReleased
+
+    private void ansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ansActionPerformed
+        checkAns();
+    }//GEN-LAST:event_ansActionPerformed
+
+    private void jButton3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton3KeyPressed
+        
+    }//GEN-LAST:event_jButton3KeyPressed
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        hasilTestList.clear();
+        tableUpdate();
+        run();
+        this.skip=2;
+        qtySkip.setText("Kesempatan skip : "+Integer.toString(this.skip));
+        JOptionPane.showMessageDialog(null, "Berhasil Reset!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -248,10 +520,15 @@ public class Aritmatika extends javax.swing.JFrame {
     private javax.swing.JTextField ans;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel numb1;
-    private javax.swing.JLabel numb2;
-    private javax.swing.JLabel op;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel qstText;
+    private javax.swing.JLabel qtyBenar;
+    private javax.swing.JLabel qtySalah;
+    private javax.swing.JLabel qtySkip;
+    private javax.swing.JTable tableList;
     // End of variables declaration//GEN-END:variables
 }
