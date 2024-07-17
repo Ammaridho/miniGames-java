@@ -22,18 +22,30 @@ import javax.swing.text.DocumentFilter;
  *
  * @author IT
  */
-public class Aritmatika extends javax.swing.JFrame {
+public class Turnament extends javax.swing.JFrame {
 
     /**
      * Creates new form Aritmatika
      */
-    public Aritmatika() {
+    public Turnament() {
         initComponents();
         // set only number can fill ans
         ((AbstractDocument)ans.getDocument()).setDocumentFilter(new NumericDocumentFilter());
         qtySkip.setText("Kesempatan skip : "+Integer.toString(this.skip));
         run();
-        tableUpdate();
+    }
+    
+    int qtySoal = 0;
+    
+    public Turnament(int qtySoal) {
+        
+        this.qtySoal = qtySoal;
+        
+        initComponents();
+        // set only number can fill ans
+        ((AbstractDocument)ans.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+        qtySkip.setText("Kesempatan skip : "+Integer.toString(this.skip));
+        run();
     }
     
     String qst = "";
@@ -58,11 +70,6 @@ public class Aritmatika extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         qtySkip = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableList = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        qtyBenar = new javax.swing.JLabel();
-        qtySalah = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         freeTest = new javax.swing.JLabel();
         exit = new javax.swing.JLabel();
@@ -153,54 +160,6 @@ public class Aritmatika extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tableList.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "No", "Qst", "Ans", "True/False"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tableList);
-
-        jButton3.setText("Reset");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
-            }
-        });
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jButton3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jButton3KeyPressed(evt);
-            }
-        });
-
-        qtyBenar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        qtyBenar.setText("Benar:");
-
-        qtySalah.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        qtySalah.setText("Salah:");
-
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/minigames/education_calculator_maths_math_icon_149699 (1).png"))); // NOI18N
@@ -224,11 +183,6 @@ public class Aritmatika extends javax.swing.JFrame {
 
         turnament.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         turnament.setText("Turnament");
-        turnament.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                turnamentMouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -241,26 +195,13 @@ public class Aritmatika extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(165, 165, 165)
-                                        .addComponent(jButton3))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(143, 143, 143)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(qtySalah, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(qtyBenar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(143, 143, 143)
-                                .addComponent(freeTest)
-                                .addGap(18, 18, 18)
-                                .addComponent(turnament, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jLabel3)
+                        .addGap(143, 143, 143)
+                        .addComponent(freeTest)
+                        .addGap(18, 18, 18)
+                        .addComponent(turnament, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(80, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -276,20 +217,9 @@ public class Aritmatika extends javax.swing.JFrame {
                             .addComponent(freeTest, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(turnament, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
+                .addGap(103, 103, 103)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(qtyBenar)
-                        .addGap(44, 44, 44)
-                        .addComponent(qtySalah)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3)))
-                .addGap(34, 34, 34))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(765, 562));
@@ -326,6 +256,7 @@ public class Aritmatika extends javax.swing.JFrame {
                 break;
                 
             case "/":
+                
                 rand1 = getRandomNumber100();
                 rand2 = getRandomNumber100();
                 
@@ -391,8 +322,15 @@ public class Aritmatika extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "SALAH!", "Alert", JOptionPane.INFORMATION_MESSAGE);  
             HasilTest ht = new HasilTest(qst, anss, this.result, false);
             hasilTestList.add(ht);
+            run();
         }
-        tableUpdate();
+        this.qtySoal--;
+        if(this.qtySoal<1){
+            JOptionPane.showMessageDialog(null, "Soal Habis!", "Alert", JOptionPane.INFORMATION_MESSAGE);  
+            Result result = new Result(hasilTestList);
+            this.hide(); 
+            result.setVisible(true);
+        }
     }
     
     // regex just number
@@ -431,49 +369,6 @@ public class Aritmatika extends javax.swing.JFrame {
         }
     }
     
-    private void tableUpdate(){
-        
-        DefaultTableModel d = (DefaultTableModel)tableList.getModel(); // get table`
-        
-        d.setRowCount(0); 
-        
-        // set data in table
-        int i = 1;
-        int countBenar = 0;
-        int countSalah = 0;
-        for (HasilTest ht : hasilTestList) {
-            
-            //  ht.tampilkanData(); //-- untuk test cek
-            
-            Vector v2 = new Vector();
-            
-            v2.add(i++);
-            v2.add(ht.qst);
-            v2.add(ht.ans);
-            //v2.add(ht.result);
-            v2.add(ht.tf);
-            
-            if(ht.tf){
-                countBenar++;
-            }else{
-                countSalah++;
-                
-            }
-            
-            d.addRow(v2);
-            
-        }    
-        
-        // set qty benar
-            qtyBenar.setText("Benar : "+Integer.toString(countBenar));
-        
-        // set qty salah
-            qtySalah.setText("Salah : "+Integer.toString(countSalah));
-        
-        
-    }
-    
-    
     public class HasilTest{
         String qst;
         String ans;
@@ -496,10 +391,6 @@ public class Aritmatika extends javax.swing.JFrame {
         
     }
     
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(this.skip>0){
             run();
@@ -526,50 +417,15 @@ public class Aritmatika extends javax.swing.JFrame {
         checkAns();
     }//GEN-LAST:event_ansActionPerformed
 
-    private void jButton3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton3KeyPressed
-        
-    }//GEN-LAST:event_jButton3KeyPressed
-
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        hasilTestList.clear();
-        tableUpdate();
-        run();
-        this.skip=2;
-        qtySkip.setText("Kesempatan skip : "+Integer.toString(this.skip));
-        JOptionPane.showMessageDialog(null, "Berhasil Reset!", "Alert", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jButton3MouseClicked
-
     private void freeTestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_freeTestMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_freeTestMouseClicked
-
-    private void turnamentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_turnamentMouseClicked
-
-        int numberOfQuestions = 0;
-        boolean validInput = false;
-        
-        while (!validInput) {
-            String input = JOptionPane.showInputDialog(null, "Mulai Turnamen, berapa soal?", null);
-            System.out.println(input);
-            
-            // is cancel
-            if(input == null){
-                return;
-            }
-            
-            // is oke
-            try {
-                numberOfQuestions = Integer.parseInt(input);
-                validInput = true; // Input is valid, exit the loop
-                Turnament turnament = new Turnament(numberOfQuestions);
-                this.hide(); 
-                turnament.setVisible(true);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Harap masukkan angka yang valid.");
-            }
-            
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Keluar Turnamen?","Warning",JOptionPane.YES_NO_OPTION);
+        System.out.println(dialogResult);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            Aritmatika aritmatika = new Aritmatika();
+            this.hide(); 
+            aritmatika.setVisible(true);
         }
-    }//GEN-LAST:event_turnamentMouseClicked
+    }//GEN-LAST:event_freeTestMouseClicked
 
     private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
         int dialogResult = JOptionPane.showConfirmDialog(null, "Keluar app?","Warning",JOptionPane.YES_NO_OPTION);
@@ -596,20 +452,21 @@ public class Aritmatika extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Aritmatika.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Turnament.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Aritmatika.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Turnament.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Aritmatika.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Turnament.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Aritmatika.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Turnament.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Aritmatika().setVisible(true);
+                new Turnament().setVisible(true);
             }
         });
     }
@@ -620,16 +477,11 @@ public class Aritmatika extends javax.swing.JFrame {
     private javax.swing.JLabel freeTest;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel qstText;
-    private javax.swing.JLabel qtyBenar;
-    private javax.swing.JLabel qtySalah;
     private javax.swing.JLabel qtySkip;
-    private javax.swing.JTable tableList;
     private javax.swing.JLabel turnament;
     // End of variables declaration//GEN-END:variables
 }
